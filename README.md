@@ -27,7 +27,8 @@
     "source": "~\\AppData\\LocalLow\\Bloober Team\\Layers of Fear",
     "ignore": [
       "tmp",
-      "crash"
+      "crash\\logs",
+      "some\\file\\to\\ignore.abc"
     ],
     "target": "Win/LayersOfFear2023",
     "disabled": false
@@ -36,7 +37,7 @@
 
 - name 游戏名称
 - source 游戏数据在主机上的存储位置，~ 代表用户的主目录
-- ignore 数组，需要的文件夹或文件
+- ignore 相对路径列表，需要忽略的文件夹或文件
 - target 游戏在repo中的备份目录
 - disabled 不处理当前游戏
 
@@ -44,7 +45,7 @@
 
 先修改配置文件config.json
 
-clone之后，再powershell中运行，即可进行备份：
+clone之后，在powershell中运行，即可进行备份：
 
 ```powershell
 .\sync.ps1
@@ -62,8 +63,8 @@ clone之后，再powershell中运行，即可进行备份：
  .\sync.ps1 -Debug -Name 'Stray'
 Backing up game: Stray
 DEBUG: Checking existed backup files under Win/Stray
-DEBUG: Checking C:\Users\vales\Localworks\games-backup\Win\Stray\Config\CrashReportClient\UE4CC-Windows-2E8D38AA4AFB04A3B050BDB4980350D3\CrashReportClient.ini
-DEBUG: Found mapping: C:\Users\vales\Localworks\games-backup\Win\Stray\Config\CrashReportClient\UE4CC-Windows-2E8D38AA4AFB04A3B050BDB4980350D3\CrashReportClient.ini
+DEBUG: Checking C:\Users\k\Localworks\games-backup\Win\Stray\Config\CrashReportClient\UE4CC-Windows-2E8D38AA4AFB04A3B050BDB4980350D3\CrashReportClient.ini
+DEBUG: Found mapping: C:\Users\k\Localworks\games-backup\Win\Stray\Config\CrashReportClient\UE4CC-Windows-2E8D38AA4AFB04A3B050BDB4980350D3\CrashReportClient.ini
 (...省略文件列表)
 DEBUG: Hash matched: Win\Stray\SaveGames\76561197960267366\Slots\Slot_3\Data.sav
 Backup Stats for 'Stray':

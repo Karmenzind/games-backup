@@ -1,17 +1,16 @@
 param (
-    [switch]$Debug,  # Debug 参数
-    [switch]$fake,   # Fake 参数，预览模式
-    [string]$name    # Game name
+    [switch]$Debug,
+    [switch]$fake, 
+    [string]$name  
 )
 
-# 根据是否传入 -Debug 参数来设置 $DebugPreference
 if ($Debug) {
-    $DebugPreference = "Continue"  # 启用调试信息输出
+    $DebugPreference = "Continue"
 } else {
-    $DebugPreference = "SilentlyContinue"  # 默认不输出调试信息
+    $DebugPreference = "SilentlyContinue"
 }
 
-# Load the configuration from config.json
+# Load the configuration
 $configPath = ".\config.json"
 $config = Get-Content -Path $configPath | ConvertFrom-Json
 
@@ -152,7 +151,6 @@ function Ensure-TargetDirectory {
 }
 
 
-# Main execution loop for each game
 foreach ($game in $config) {
     if (-not [string]::IsNullOrWhiteSpace($name) -and $name -ne $game.name) {
         continue
@@ -163,7 +161,6 @@ foreach ($game in $config) {
         continue
     }
 
-    # Validate source and target
     Must-ValidString -str $game.source -fieldName "source"
     Must-ValidString -str $game.target -fieldName "target"
 
