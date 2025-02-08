@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Alan Wake 2",
+    "source": "~\\AppData\\Local\\Remedy\\AlanWake2",
+    "ignore": [
+      "LSAO"
+    ],
+    "target": "Win/AlanWake2",
+    "disabled": false
+  },
+  {
+    "name": "港诡实录",
+    "source": "~\\AppData\\Local\\PuzzleGame\\Saved",
+    "ignore": [
+      "Logs",
+      "Crashes",
+      "Config\\CrashReportClient"
+    ],
+    "target": "Win/ParanormalHK",
+    "disabled": false
+  },
+  {
+    "name": "Silent Hill 3",
+    "target": "Win/SilentHill3",
+    "disabled": true
+  },
+  {
+    "name": "Stray",
+    "source": "~\\AppData\\Local\\Hk_project\\Saved",
+    "ignore": [
+      "Logs"
+    ],
+    "target": "Win/Stray",
+    "disabled": false
+  },
+  {
+    "name": "Resident Evil 3",
+    "source": "~\\AppData\\Local\\CAPCOM\\ResidentEvil3",
+    "ignore": [
+      "logs"
+    ],
+    "target": "Win/ResidentEvil3",
+    "disabled": true
+  },
+  {
+    "name": "Layers of Fear 2023",
+    "source": "~\\AppData\\LocalLow\\Bloober Team\\Layers of Fear",
+    "ignore": [
+      "tmp",
+      "crash"
+    ],
+    "target": "Win/LayersOfFear2023",
+    "disabled": false
+  },
+  {
+    "name": "Final Fantasy VII Remake Intergrade",
+    "source": "~\\Documents\\my games\\FINAL FANTASY VII REMAKE\\EOS",
+    "target": "Win/FF7RI",
+    "disabled": false
+  }
+]
