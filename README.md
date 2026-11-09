@@ -12,6 +12,7 @@
 - alan wake 2
 - 港诡实录
 - slient hill
+- Seven Nights Ghost
 
 ## 脚本介绍
 
@@ -40,6 +41,25 @@
 - ignore 相对路径列表，需要忽略的文件夹或文件
 - target 游戏在repo中的备份目录
 - disabled 不处理当前游戏
+
+Unity Windows 游戏也可能把 PlayerPrefs 存在注册表中，而不是存档文件中。此类游戏可使用：
+
+```json
+{
+    "name": "Seven Nights Ghost",
+    "registry": "HKEY_CURRENT_USER\\Software\\DefaultCompany\\Project_Shiawase",
+    "include": [
+      "ClearStage_h*",
+      "OfudaFlag_h*"
+    ],
+    "target": "Win/SevenNightsGhost/player-prefs.json",
+    "disabled": false
+}
+```
+
+- registry 当前支持 `HKEY_CURRENT_USER` 下的注册表键
+- include 要同步的注册表值名通配符；省略时同步该键下的全部值
+- target 注册表快照在 repo 中保存成的 JSON 文件路径
 
 ### 运行方法
 

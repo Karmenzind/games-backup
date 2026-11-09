@@ -57,5 +57,20 @@
     "source": "~\\Documents\\my games\\FINAL FANTASY VII REMAKE\\EOS",
     "target": "Win/FF7RI",
     "disabled": false
+  },
+  {
+    "name": "Seven Nights Ghost",
+    "registry": "HKEY_CURRENT_USER\\Software\\DefaultCompany\\Project_Shiawase",
+    "include": [
+      "ClearStage_h*",
+      "OfudaFlag_h*",
+      "WatchTrueEnding_h*",
+      "Brightness_h*",
+      "Language_h*",
+      "DirSpeed_h*",
+      "IsDirReversal_h*"
+    ],
+    "target": "Win/SevenNightsGhost/player-prefs.json",
+    "disabled": false
   }
 ]

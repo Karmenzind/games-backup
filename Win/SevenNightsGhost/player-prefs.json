@@ -1,0 +1,47 @@
+{
+  "registry": "HKEY_CURRENT_USER\\Software\\DefaultCompany\\Project_Shiawase",
+  "values": [
+    {
+      "name": "Brightness_h2298333740",
+      "kind": "DWord",
+      "valueType": "Int64",
+      "value": "-4654178120604057600"
+    },
+    {
+      "name": "ClearStage_h738219128",
+      "kind": "DWord",
+      "valueType": "Int32",
+      "value": 8
+    },
+    {
+      "name": "DirSpeed_h406606205",
+      "kind": "DWord",
+      "valueType": "Int64",
+      "value": "4636737291354636288"
+    },
+    {
+      "name": "IsDirReversal_h706884168",
+      "kind": "DWord",
+      "valueType": "Int32",
+      "value": 0
+    },
+    {
+      "name": "Language_h3872303031",
+      "kind": "Binary",
+      "valueType": "Byte[]",
+      "value": "emgtSGFucwA="
+    },
+    {
+      "name": "OfudaFlag_h3192892464",
+      "kind": "Binary",
+      "valueType": "Byte[]",
+      "value": "MTExMTExMQA="
+    },
+    {
+      "name": "WatchTrueEnding_h2426649589",
+      "kind": "DWord",
+      "valueType": "Int32",
+      "value": 1
+    }
+  ]
+}

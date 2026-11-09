@@ -37,6 +37,112 @@ function Validate-SourceAndTarget {
     Must-ValidString -str $target -fieldName "target"
 }
 
+# Back up selected values from a Windows registry key to a deterministic JSON
+# file. Unity stores PlayerPrefs in the registry for standalone Windows games.
+function Backup-Registry {
+    param (
+        [string]$gameName,
+        [string]$registry,
+        [string]$target,
+        [array]$include
+    )
+
+    if ($registry -notlike "HKEY_CURRENT_USER\*") {
+        Write-Error "Only HKEY_CURRENT_USER registry sources are supported: $registry"
+        exit 1
+    }
+
+    $registryPath = "Registry::$registry"
+    if (-not (Test-Path -LiteralPath $registryPath)) {
+        Write-Error "Registry source does not exist: $registry"
+        exit 1
+    }
+
+    $key = Get-Item -LiteralPath $registryPath
+    $values = @()
+    foreach ($valueName in ($key.GetValueNames() | Sort-Object)) {
+        $selected = $include.Count -eq 0
+        foreach ($pattern in $include) {
+            if ($valueName -like $pattern) {
+                $selected = $true
+                break
+            }
+        }
+        if (-not $selected) {
+            Write-Debug "Ignored registry value: $valueName"
+            continue
+        }
+
+        $kind = $key.GetValueKind($valueName).ToString()
+        $value = $key.GetValue(
+            $valueName,
+            $null,
+            [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames
+        )
+        $valueType = $value.GetType().Name
+        if ($value -is [byte[]]) {
+            $value = [Convert]::ToBase64String($value)
+        } elseif ($value -is [int64]) {
+            # Keep 64-bit Unity float payloads exact in JSON consumers that
+            # cannot safely represent integers larger than 2^53.
+            $value = $value.ToString([System.Globalization.CultureInfo]::InvariantCulture)
+        }
+
+        $values += [ordered]@{
+            name = $valueName
+            kind = $kind
+            valueType = $valueType
+            value = $value
+        }
+    }
+
+    if ($values.Count -eq 0) {
+        Write-Error "No registry values matched the include list for: $registry"
+        exit 1
+    }
+
+    $snapshot = [ordered]@{
+        registry = $registry
+        values = $values
+    }
+    $content = ($snapshot | ConvertTo-Json -Depth 5) + [Environment]::NewLine
+    $targetDir = [System.IO.Path]::GetDirectoryName($target)
+    Ensure-TargetDirectory $targetDir
+
+    $addedFiles = 0
+    $overwrittenFiles = 0
+    $notChanged = 0
+    if (-not (Test-Path -LiteralPath $target)) {
+        Write-Debug "Writing registry snapshot: $target"
+        if (-not $fake) {
+            [System.IO.File]::WriteAllText(
+                [System.IO.Path]::GetFullPath($target),
+                $content,
+                (New-Object System.Text.UTF8Encoding($false))
+            )
+        }
+        $addedFiles++
+    } elseif ((Get-Content -Raw -LiteralPath $target) -ceq $content) {
+        $notChanged++
+    } else {
+        Write-Debug "Updating registry snapshot: $target"
+        if (-not $fake) {
+            [System.IO.File]::WriteAllText(
+                [System.IO.Path]::GetFullPath($target),
+                $content,
+                (New-Object System.Text.UTF8Encoding($false))
+            )
+        }
+        $overwrittenFiles++
+    }
+
+    Write-Host "Backup Stats for '$gameName':"
+    Write-Host "  Added files: $addedFiles"
+    Write-Host "  Overwritten files: $overwrittenFiles"
+    Write-Host "  Not changed: $notChanged"
+    Write-Host "  Deleted files: 0"
+}
+
 # Function to handle file backup
 function Backup-Game {
     param (
@@ -161,9 +267,19 @@ foreach ($game in $config) {
         continue
     }
 
-    Must-ValidString -str $game.source -fieldName "source"
     Must-ValidString -str $game.target -fieldName "target"
 
+    $hasSource = -not [string]::IsNullOrWhiteSpace($game.source)
+    $hasRegistry = -not [string]::IsNullOrWhiteSpace($game.registry)
+    if ($hasSource -eq $hasRegistry) {
+        Write-Error "Game '$($game.name)' must define exactly one of 'source' or 'registry'"
+        exit 1
+    }
+
     Write-Host "Backing up game: $($game.name)"
-    Backup-Game -gameName $game.name -source $game.source -target $game.target -ignore $game.ignore
+    if ($hasRegistry) {
+        Backup-Registry -gameName $game.name -registry $game.registry -target $game.target -include $game.include
+    } else {
+        Backup-Game -gameName $game.name -source $game.source -target $game.target -ignore $game.ignore
+    }
 }
